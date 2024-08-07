@@ -1,0 +1,163 @@
+<html>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/ui/1.14.0-beta.2/jquery-ui.min.js"
+    integrity="sha256-E7PeZTkHU61hmvmEMwtUMgm9Aff574wswy5F1Y0oIRA=" crossorigin="anonymous"></script>
+
+<head>
+    <style>
+        #canvas {}
+
+        #background {
+            display: none;
+        }
+
+        #ballon {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            cursor: move;
+            opacity: 0.5;
+        }
+        #video{
+            position: relative;
+        }
+        #ballonTwo{
+            position: absolute;
+            top: 5%;
+            z-index: 999;
+        }
+        
+    </style>
+</head>
+
+<body onload="init();">
+    <img id="ballonTwo" alt=""
+            src="./eeee.png" />
+    <button onclick="startWebcam();">Start WebCam</button>
+    <button onclick="stopWebcam();">Stop WebCam</button>
+    <button onclick="snapshot();">Take Snapshot</button>
+    </p>
+    <video onclick="snapshot(this);" width=1920 height=1080 id="video" controls autoplay></video>
+    <p>
+        Screenshots :
+    <p>
+    <div style="position: relative;">
+        <canvas id="myCanvas" width="1920" height="1080"></canvas>
+        <img id="ballon" alt=""
+            src="./eeee.png" />
+    </div>
+    <div>
+        <button onclick="download();">Download</button>
+    </div>
+</body>
+<script>
+    dragElement(document.getElementById("ballon"));
+
+    navigator.getUserMedia = (navigator.getUserMedia ||
+        navigator.webkitGetUserMedia ||
+        navigator.mozGetUserMedia ||
+        navigator.msGetUserMedia);
+
+    var video;
+    var webcamStream;
+
+    function startWebcam() {
+        if (navigator.getUserMedia) {
+            navigator.mediaDevices.getUserMedia(
+                {
+                    video: true,
+                    audio: false
+                },
+            ).then((localMediaStream) => {
+                video = document.querySelector('video');
+                video.srcObject = localMediaStream;
+                webcamStream = localMediaStream;
+            });
+        } else {
+            console.log("getUserMedia not supported");
+        }
+    }
+
+    function stopWebcam() {
+        var track = webcamStream.getTracks()[0];
+        if (track) {
+            track.stop();
+        }
+
+    }
+
+    var canvas, ctx;
+
+    function init() {
+        canvas = document.getElementById("myCanvas");
+        ctx = canvas.getContext('2d');
+    }
+
+    function snapshot() {
+
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        var d_canvas = document.getElementById('canvas');
+    }
+
+    function download() {
+        var ballon = document.getElementById('ballon');
+
+        var ballon = document.getElementById('ballon'); var $ballon = $('#ballon');
+        var $canvas = $('#myCanvas');
+        var ballon_x = $ballon.offset().left - $canvas.offset().left,
+            ballon_y = $ballon.offset().top - $canvas.offset().top;
+        ctx.drawImage(ballon, ballon_x, ballon_y);
+        var canvas = document.getElementById("myCanvas");
+        var img = canvas.toDataURL("image/png");
+        var a = document.createElement("a"); //Create <a>
+        a.crossOrigin="anonymous"
+        a.href = img //Image Base64 Goes here
+        a.download = "Pic.png"; //File name Here
+        a.click();
+    }
+
+    function dragElement(elmnt) {
+        var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+        if (document.getElementById(elmnt.id + "header")) {
+            // if present, the header is where you move the DIV from:
+            document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+        } else {
+            // otherwise, move the DIV from anywhere inside the DIV:
+            elmnt.onmousedown = dragMouseDown;
+        }
+
+        function dragMouseDown(e) {
+            e = e || window.event;
+            e.preventDefault();
+            // get the mouse cursor position at startup:
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            document.onmouseup = closeDragElement;
+            // call a function whenever the cursor moves:
+            document.onmousemove = elementDrag;
+        }
+
+        function elementDrag(e) {
+            e = e || window.event;
+            e.preventDefault();
+            // calculate the new cursor position:
+            pos1 = pos3 - e.clientX;
+            pos2 = pos4 - e.clientY;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            // set the element's new position:
+            elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+            elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+        }
+
+        function closeDragElement() {
+            // stop moving when mouse button is released:
+            document.onmouseup = null;
+            document.onmousemove = null;
+        }
+    }
+
+</script>
+
+</html>
