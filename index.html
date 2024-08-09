@@ -69,23 +69,38 @@
     }
  
     .btn {
-      width: 150px;
-      height: 40px;
-      border: none;
-      border-radius: 4px;
-      background-color: #272727;
-      color: #FFFFFF;
-      font-size: 18px;
-      margin: 0 0 0 10px;
+        width: 150px;
+        height: 40px;
+        border: none;
+        box-shadow: 2px 2px 8px -1px rgba(128, 128, 128, 0.466);
+        border-radius: 4px;
+        background-color: #ffffff;
+        color: #000000;
+        font-size: 18px;
+        margin: 20px 40px;
+        transition: 0.3s;
+      }
+      .btn:hover,:focus{
+        transform: scale(1.1);
+    }
+    .buttons{
+      display: flex;
+      justify-content: flex-start;
     }
 </style>
 </head>
 <body onload="init();initPre();">
-<button class="btn" onclick="startWebcam();">Start WebCam</button>
-<button class="btn" onclick="stopWebcam();">Stop WebCam</button>
-<button class="btn" onclick="snapshot();snapshotPre();">Take Snapshot</button>
-<button class="btn" onclick="download()">Download</button>
-<button class="btn" onclick="switchCamera();">Switch Camera</button>
+  <div class="buttons">
+    <div class="left">
+      <button class="btn" onclick="startWebcam();">Start WebCam</button>
+    <button class="btn" onclick="stopWebcam();">Stop WebCam</button>
+    </div>
+    <div class="right">
+      <button class="btn" onclick="snapshot();snapshotPre();">Take Snapshot</button>
+      <button class="btn" onclick="download()">Download</button>
+      <button class="btn" onclick="switchCamera();">Switch Camera</button>
+    </div>
+  </div>
 
   <br />
 <br />
